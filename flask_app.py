@@ -29,6 +29,7 @@ class DbConnection:
     def commit(self):
         self.connection.commit()
 
+
 dbConnection = DbConnection(
             "tbuli12.mysql.pythonanywhere-services.com",
             "tbuli12",
@@ -43,10 +44,13 @@ def pullRecipes():
         recipeNames = cursor.fetchall()
     return [{"name": name, "date": last} for name, last in recipeNames]
 
+
 def recipeSetdate(name):
     with dbConnection as cursor:
-        cursor.execute(f"UPDATE recipes SET last='{datetime.date.today().strftime('%Y-%m-%d')}' WHERE name='{name}'")
+        date = datetime.date.today().strftime('%Y-%m-%d')
+        cursor.execute(f"UPDATE recipes SET last='{date}' WHERE name='{name}'")
         dbConnection.commit()
+
 
 def addRecipe(name):
     with dbConnection as cursor:
@@ -78,5 +82,3 @@ def getRecipes():
 
 if __name__ == '__main__':
     app.run()
-
-
