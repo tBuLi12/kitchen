@@ -59,13 +59,13 @@ def addRecipe(name):
 
 
 @app.route('/', methods=['GET'])
-def home():
+def homeRoute():
     with open('index.html') as page:
         return page.read()
 
 
 @app.route('/recipes', methods=['GET', 'POST'])
-def getRecipes():
+def recipesRoute():
     if request.method == 'GET':
         return json.dumps(pullRecipes())
     if request.method == 'POST':
