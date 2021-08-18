@@ -47,14 +47,14 @@ def pullRecipes():
 
 def recipeSetdate(name):
     with dbConnection as cursor:
-        date = datetime.date.today().strftime('%Y-%m-%d')
-        cursor.execute(f"UPDATE recipes SET last='{date}' WHERE name='{name}'")
+        args = (datetime.date.today().strftime('%Y-%m-%d'), name)
+        cursor.execute("UPDATE recipes SET last=%s WHERE name=%s", args)
         dbConnection.commit()
 
 
 def addRecipe(name):
     with dbConnection as cursor:
-        cursor.execute(f"INSERT INTO recipes (name) VALUES ('{name}')")
+        cursor.execute("INSERT INTO recipes (name) VALUES (%s)", (name,))
         dbConnection.commit()
 
 
