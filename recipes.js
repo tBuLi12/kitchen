@@ -45,13 +45,19 @@ function addRecipe(name) {
 
 function drawRecipe(recipe) {
     let newRecipeElem = document.createElement('div');
+    newRecipeElem.className = "recipediv";
     newRecipeElem.innerHTML = recipe.name;
     newRecipeElem.dataset.rname = recipe.name;
     
     let newButton = document.createElement('button');
     newButton.innerHTML = 'Done';
     newButton.onclick = setRecipeDate;
+    
+    let span = document.createElement('span');
+    span.innerHTML = recipe.date;
+
     newRecipeElem.append(newButton);
+    newRecipeElem.append(span);
 
     recipesDiv.append(newRecipeElem);
 }
@@ -66,6 +72,8 @@ fetch('http://tbuli12.pythonanywhere.com/recipes').then(response => {
 }).then(response => {
     drawRecipes(response);
 });
+
+
 
 
 /*

@@ -1,0 +1,7 @@
+.recipediv span {
+    display: none;
+}
+
+.recipediv:hover span {
+    display: inline;
+}
