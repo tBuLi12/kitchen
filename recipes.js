@@ -18,7 +18,7 @@ function setRecipeDate() {
     data = new FormData()
     data.append("name", this.parentElement.dataset.rname);
     data.append("op", "setdate");
-    fetch('http://tbuli12.pythonanywhere.com/recipes', {
+    fetch('https://tbuli12.pythonanywhere.com/recipes', {
         method: 'POST',
         body: data
     });/*.then(response => {
@@ -32,7 +32,7 @@ function addRecipe(name) {
     data = new FormData()
     data.append("name", name);
     data.append("op", "new");
-    fetch('http://tbuli12.pythonanywhere.com/recipes', {
+    fetch('https://tbuli12.pythonanywhere.com/recipes', {
         method: 'POST',
         body: data
     });/*.then(response => {
@@ -67,7 +67,7 @@ function drawRecipes(recipesArray) {
 }
 
 
-fetch('http://tbuli12.pythonanywhere.com/recipes').then(response => {
+fetch('https://tbuli12.pythonanywhere.com/recipes').then(response => {
     return response.json();
 }).then(response => {
     drawRecipes(response);
