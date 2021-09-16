@@ -75,6 +75,7 @@ def loginRoute():
             return page.read()
     if request.method == 'POST':
         session['username'] = request.form['username']
+        return redirect(url_for('homeRoute'))
 
 
 @app.route('/recipes', methods=['GET', 'POST'])
