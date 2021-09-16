@@ -1,9 +1,10 @@
-from flask import Flask, json, request
+from flask import Flask, json, request, redirect, url_for, session
 import MySQLdb
 import datetime
 
 
 app = Flask(__name__)
+app.secret_key = '1k09&ebq17&bd(o]=aQ!$bb'
 
 
 class DbConnection:
@@ -60,8 +61,20 @@ def addRecipe(name):
 
 @app.route('/', methods=['GET'])
 def homeRoute():
-    with open('index.html') as page:
-        return page.read()
+    if 'username' in session:
+        with open('index.html') as page:
+            return page.read()
+    else:
+        return redirect(url_for('loginRoute'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def loginRoute():
+    if request.method == 'GET':
+        with open('login.html') as page:
+            return page.read()
+    if request.method == 'POST':
+        session['username'] = request.form['username']
 
 
 @app.route('/recipes', methods=['GET', 'POST'])
