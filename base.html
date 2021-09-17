@@ -9,9 +9,9 @@
     <body>
         <nav>
             {% if loggedin %}
-                <a href="/logout">Log out</a>
+                <a href="/logout" id="loglink">Log out</a>
             {% else %}
-                <a href="/login">Log in</a>
+                <a href="/login" id="loglink">Log in</a>
             {% endif %}
         </nav>
         {% block body %}

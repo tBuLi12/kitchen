@@ -70,7 +70,7 @@ def addRecipe(name):
 @app.route('/', methods=['GET'])
 def homeRoute():
     if 'username' in session:
-        return render_template('index.html', loggedin=False)
+        return render_template('index.html', loggedin=True)
     else:
         return redirect(url_for('loginRoute'))
 
@@ -78,10 +78,16 @@ def homeRoute():
 @app.route('/login', methods=['GET', 'POST'])
 def loginRoute():
     if request.method == 'GET':
-        return render_template('login.html', loggedin=False)
+        return render_template('login.html', loggedin=('username' in session))
     if request.method == 'POST':
         session['username'] = request.form['username']
         return redirect(url_for('homeRoute'))
+
+
+@app.route('/logout', methods=['GET'])
+def logoutRoute():
+    session.pop('username', None)
+    return redirect(url_for('loginRoute'))
 
 
 @app.route('/recipes', methods=['GET', 'POST'])

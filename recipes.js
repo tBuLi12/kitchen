@@ -1,5 +1,6 @@
 let recipesDiv = document.getElementById('rlist');
 let addButton = document.getElementById('addbutton');
+let logLink = document.getElementById('loglink');
 
 addButton.onclick = () => {
     let name = prompt("enter name:");
@@ -13,6 +14,10 @@ addButton.onclick = () => {
         alert("Invalid name");
     }
 };
+
+logLink.onclick = () => {
+    recipesDiv.innerHTML = 'You need to be logged in to view this content';
+}
 
 function setRecipeDate() {
     data = new FormData()
@@ -67,9 +72,12 @@ function drawRecipes(recipesArray) {
 }
 
 
+recipesDiv.innerHTML = 'Loading recipes...';
+
 fetch('https://tbuli12.pythonanywhere.com/recipes').then(response => {
     return response.json();
 }).then(response => {
+    recipesDiv.innerHTML = '';
     drawRecipes(response);
 });
 
