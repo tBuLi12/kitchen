@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="/static/recipes.css" rel="stylesheet">
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <nav>
+            {% if loggedin %}
+                <a href="/logout">Log out</a>
+            {% else %}
+                <a href="/login">Log in</a>
+            {% endif %}
+        </nav>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

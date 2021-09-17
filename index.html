@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Recipes</title>
-        <meta charset="UTF-8">
-        <script src="/static/recipes.js" defer></script>
-        <link href="/static/recipes.css" rel="stylesheet">
-    </head>
-    <body>
-        <h1>RECIPES:</h1>
-        <button id="addbutton">Add new</button>
-        <div id="rlist">
-        </div>
-    </body>
-</html>
+{% extends "base.html" %}
+{% block head %}
+    <title>Recipes</title>
+    <script src="/static/recipes.js" defer></script>
+{% endblock %}
+{% block body %}
+    <h1>RECIPES:</h1>
+    <button id="addbutton">Add new</button>
+    <div id="rlist">
+    </div>
+{% endblock %}

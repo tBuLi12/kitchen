@@ -1,4 +1,12 @@
-from flask import Flask, json, request, redirect, url_for, session
+from flask import (
+    Flask,
+    json,
+    request,
+    redirect,
+    url_for,
+    session,
+    render_template
+)
 import MySQLdb
 import datetime
 
@@ -62,8 +70,7 @@ def addRecipe(name):
 @app.route('/', methods=['GET'])
 def homeRoute():
     if 'username' in session:
-        with open('index.html') as page:
-            return page.read()
+        return render_template('index.html', loggedin=False)
     else:
         return redirect(url_for('loginRoute'))
 
@@ -71,8 +78,7 @@ def homeRoute():
 @app.route('/login', methods=['GET', 'POST'])
 def loginRoute():
     if request.method == 'GET':
-        with open('login.html') as page:
-            return page.read()
+        return render_template('login.html', loggedin=False)
     if request.method == 'POST':
         session['username'] = request.form['username']
         return redirect(url_for('homeRoute'))
