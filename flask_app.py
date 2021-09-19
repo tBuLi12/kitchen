@@ -7,12 +7,20 @@ from flask import (
     session,
     render_template
 )
+from threading import Lock
 import MySQLdb
 import datetime
+import bcrypt
+from time import time
+from string import printable
+from random import choice
 
 
 app = Flask(__name__)
 app.secret_key = '1k09&ebq17&bd(o]=aQ!$bb'
+
+suToken = None
+suTokenLock = Lock()
 
 
 class DbConnection:
@@ -67,6 +75,32 @@ def addRecipe(name):
         dbConnection.commit()
 
 
+def authenticate(username, password):
+    with dbConnection as cursor:
+        cursor.execute("SELECT passhash FROM users WHERE username=%s", (username,))
+        result = cursor.fetchall()
+        if not result:
+            return False
+        passHash = cursor.fetchall()[0][0]
+    return bcrypt.checkpw(password, passHash)
+
+
+def signUp(username, password):
+    passhash = bcrypt.hashpw(password, bcrypt.gensalt())
+    with dbConnection as cursor:
+        cursor.execute("INSERT INTO users (username, passhash) VALUES (%s, %s)", (username, passhash))
+        dbConnection.commit()
+
+
+@app.route('/token', methods=['GET'])
+def getToken():
+    global suToken
+    token = ''.join([choice(printable) for i in range(10)])
+    with suTokenLock:
+        suToken = (time(), token)
+    return token
+
+
 @app.route('/', methods=['GET'])
 def homeRoute():
     if 'username' in session:
@@ -75,13 +109,30 @@ def homeRoute():
         return redirect(url_for('loginRoute'))
 
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signupRoute():
+    global suToken
+    if request.method == 'GET':
+        return render_template('signup.html', loggedin=('username' in session))
+    if request.method == 'POST':
+        token = request.form['token']
+        if suToken and token == suToken[1] and time() - suToken[0] < 60:
+            signUp(request.form['username'], request.form['password'])
+            return redirect(url_for('loginRoute'))
+        else:
+            return redirect(url_for('signupRoute'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def loginRoute():
     if request.method == 'GET':
         return render_template('login.html', loggedin=('username' in session))
     if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('homeRoute'))
+        if authenticate(request.form['username'], request.form['password']):
+            session['username'] = request.form['username']
+            return redirect(url_for('homeRoute'))
+        else:
+            return redirect(url_for('loginRoute'))
 
 
 @app.route('/logout', methods=['GET'])
